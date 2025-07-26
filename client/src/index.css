@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(222, 84%, 4.9%);
+  --muted: hsl(210, 40%, 96%);
+  --muted-foreground: hsl(215, 13.8%, 34.1%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(222, 84%, 4.9%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(222, 84%, 4.9%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --primary: hsl(180, 100%, 50%);
+  --primary-foreground: hsl(222, 84%, 4.9%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(222, 84%, 4.9%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(222, 84%, 4.9%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(222, 84%, 4.9%);
+  --radius: 0.5rem;
+  
+  /* Custom colors for Programme FUTUR */
+  --dark-blue: hsl(218, 67%, 14%);
+  --cyan: hsl(180, 100%, 50%);
+  --orange: hsl(22, 100%, 50%);
+}
+
+.dark {
+  --background: hsl(222, 84%, 4.9%);
+  --foreground: hsl(60, 9.1%, 97.8%);
+  --muted: hsl(217, 32%, 17%);
+  --muted-foreground: hsl(215, 20.2%, 65.1%);
+  --popover: hsl(222, 84%, 4.9%);
+  --popover-foreground: hsl(60, 9.1%, 97.8%);
+  --card: hsl(222, 84%, 4.9%);
+  --card-foreground: hsl(60, 9.1%, 97.8%);
+  --border: hsl(217, 32%, 17%);
+  --input: hsl(217, 32%, 17%);
+  --primary: hsl(180, 100%, 50%);
+  --primary-foreground: hsl(222, 84%, 4.9%);
+  --secondary: hsl(217, 32%, 17%);
+  --secondary-foreground: hsl(60, 9.1%, 97.8%);
+  --accent: hsl(217, 32%, 17%);
+  --accent-foreground: hsl(60, 9.1%, 97.8%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(212, 12%, 87%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-montserrat antialiased bg-[#0b1d3a] text-white;
+    font-family: 'Montserrat', sans-serif;
+  }
+}
+
+.bg-dark-blue {
+  background-color: #0b1d3a;
+}
+
+.text-cyan {
+  color: #00ffff;
+}
+
+.bg-cyan {
+  background-color: #00ffff;
+}
+
+.text-orange {
+  color: #ff7f00;
+}
+
+.bg-orange {
+  background-color: #ff7f00;
+}
+
+.border-cyan {
+  border-color: #00ffff;
+}
+
+.border-orange {
+  border-color: #ff7f00;
+}
+
+.hover\:bg-cyan\/80:hover {
+  background-color: rgba(0, 255, 255, 0.8);
+}
+
+.hover\:bg-orange\/80:hover {
+  background-color: rgba(255, 127, 0, 0.8);
+}
+
+.focus\:border-cyan:focus {
+  border-color: #00ffff;
+}
+
+.focus\:ring-cyan\/20:focus {
+  box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.2);
+}
+
+.focus\:border-orange:focus {
+  border-color: #ff7f00;
+}
+
+.focus\:ring-orange\/20:focus {
+  box-shadow: 0 0 0 3px rgba(255, 127, 0, 0.2);
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
