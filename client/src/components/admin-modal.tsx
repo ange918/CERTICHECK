@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -39,6 +39,10 @@ export function AdminModal({ isOpen, onClose, onLogin }: AdminModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-gray-800 border-gray-700 max-w-md">
+        <DialogTitle className="sr-only">Connexion Administrateur</DialogTitle>
+        <DialogDescription className="sr-only">
+          Saisissez le mot de passe administrateur pour accéder au panel de gestion
+        </DialogDescription>
         <div className="text-center mb-6">
           <div className="w-16 h-16 bg-orange rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">

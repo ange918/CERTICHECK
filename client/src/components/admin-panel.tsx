@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -75,6 +75,26 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "Erreur",
+          description: "La photo ne doit pas dépasser 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Erreur", 
+          description: "Veuillez sélectionner un fichier image (JPG, PNG, etc.)",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       setPhotoFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -123,6 +143,10 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-gray-800 border-gray-700 max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogTitle className="sr-only">Panel Administrateur</DialogTitle>
+        <DialogDescription className="sr-only">
+          Formulaire pour ajouter un nouvel étudiant au système
+        </DialogDescription>
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-orange rounded-full flex items-center justify-center">
