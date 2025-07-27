@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AdminModal } from "@/components/admin-modal";
 import { AdminPanel } from "@/components/admin-panel";
-import { StudentSearch } from "@/components/student-search";
+import StudentSearch from "@/components/student-search";
 import { StudentResult } from "@/components/student-result";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";

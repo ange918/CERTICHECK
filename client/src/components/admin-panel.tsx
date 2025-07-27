@@ -8,6 +8,48 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { InsertStudent } from "@shared/schema";
+import { openDB } from "idb";
+
+// Définition du type Student localement (si pas déjà présent)
+interface Student {
+  id: string;
+  nom: string;
+  prenom: string;
+  matricule: string;
+  filieres: string[];
+  photo: string;
+}
+
+// Initialisation de la base IndexedDB
+async function getDB() {
+  return openDB("FuturCertifyDB", 1, {
+    upgrade(db) {
+      if (!db.objectStoreNames.contains("students")) {
+        const store = db.createObjectStore("students", { keyPath: "id" });
+        store.createIndex("matricule", "matricule", { unique: true });
+      }
+    },
+  });
+}
+
+// Chercher un étudiant par matricule
+async function findStudentByMatricule(matricule: string): Promise<Student | undefined> {
+  const db = await getDB();
+  const index = db.transaction("students").objectStore("students").index("matricule");
+  return await index.get(matricule.toUpperCase());
+}
+
+// Ajouter un étudiant
+async function addStudent(student: Student) {
+  if (!student.id) {
+    student.id = Date.now().toString();
+  }
+  const db = await getDB();
+  // Vérifier unicité
+  const exists = await findStudentByMatricule(student.matricule);
+  if (exists) throw new Error("Ce numéro matricule existe déjà");
+  await db.add("students", student);
+}
 
 interface AdminPanelProps {
   isOpen: boolean;
@@ -36,28 +78,6 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
-
-  const addStudentMutation = useMutation({
-    mutationFn: async (studentData: InsertStudent) => {
-      const response = await apiRequest("POST", "/api/students", studentData);
-      return response.json();
-    },
-    onSuccess: () => {
-      toast({
-        title: "Succès",
-        description: "Étudiant ajouté avec succès !",
-      });
-      queryClient.invalidateQueries({ queryKey: ["/api/students"] });
-      resetForm();
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Erreur",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -132,11 +152,25 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
 
     const photoUrl = formData.photo || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400";
 
-    addStudentMutation.mutate({
+    // Remplacer l'appel API par la fonction locale
+    // const response = await apiRequest("POST", "/api/students", studentData);
+    addStudent({
       ...formData,
       nom: formData.nom.toUpperCase(),
       matricule: formData.matricule.toUpperCase(),
       photo: photoUrl
+    }).then(() => {
+      toast({
+        title: "Succès",
+        description: "Étudiant ajouté avec succès !",
+      });
+      resetForm();
+    }).catch((error: Error) => {
+      toast({
+        title: "Erreur",
+        description: error.message,
+        variant: "destructive",
+      });
     });
   };
 
@@ -277,13 +311,13 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
           <div className="flex space-x-4 pt-6">
             <Button
               type="submit"
-              disabled={addStudentMutation.isPending}
+              disabled={false} // Removed isPending as it's no longer a query
               className="flex-1 bg-cyan hover:bg-cyan/80 text-dark-blue font-bold py-4 transition-all duration-300"
             >
               <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
               </svg>
-              {addStudentMutation.isPending ? "Ajout en cours..." : "Ajouter l'étudiant"}
+              Ajouter l'étudiant
             </Button>
             <Button
               type="button"
